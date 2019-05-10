@@ -1,4 +1,4 @@
-# ci-cd-gitlab
+# CI-CD-Gitlab
 Gitlab CI/CD configuration with AWS Ec2 instance
 ## Preconditions for Gitlab
 
@@ -26,6 +26,6 @@ Step3: Now copy the private key from your ec2 instance which you have generated 
 
 https://snag.gy/5mlRNO.jpg
 
-## now push some change pipeline will get triggered and file will be updated in your instance.
+## Now push some change pipeline will get triggered and file will be updated in your instance.
 
 ### PS: Make sure you have assigned Elastic IP to your instance,GIT installed
