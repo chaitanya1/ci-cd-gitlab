@@ -1,0 +1,39 @@
+before_script:
+
+  - apt-get update -qq
+  - apt-get install -qq git
+  # Setup SSH deploy keys
+  
+  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
+  
+  ##
+  ## Run ssh-agent (inside the build environment)
+  ##
+
+  - eval $(ssh-agent -s)
+  ##
+  ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  ## We're using tr to fix line endings which makes ed25519 keys work
+  ## without extra base64 encoding.
+  ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+  ##
+
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  ##
+  ## Create the SSH directory and give it the right permissions
+  ##
+
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    
+deploy_dev:
+  type: deploy
+  environment:
+    name: dev
+    url: ec1-34-233-222-138.compute-2.amazonaws.com
+  script:
+    - ssh ubuntu@32.229.112.192 "cd /home/ubuntu/ci-and-cd && git checkout master && git pull origin master && exit"
+  only:
+    - master
